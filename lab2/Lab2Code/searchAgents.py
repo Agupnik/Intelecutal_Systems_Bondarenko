@@ -43,53 +43,44 @@ class SearchAgent(Agent):
             return Directions.STOP
 
 
+# Мангеттенська відстань
 def manhattan(node_x, goal_x, node_y, goal_y):
     return abs(node_x - goal_x) + abs(node_y - goal_y)
 
 
+# Евклідова відстань
 def euclidean(node_x, goal_x, node_y, goal_y):
     return ((node_x - goal_x) ** 2 + (node_y - goal_y) ** 2) ** 0.5
 
 
+# Евклідова квадратична відстань
 def euclideanSquared(node_x, goal_x, node_y, goal_y):
     return (node_x - goal_x) ** 2 + (node_y - goal_y) ** 2
 
 
+# Мангеттенська евристика
 def manhattanHeuristic(position, problem):
-    "The Manhattan distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
     return manhattan(xy1[0], xy2[0], xy1[1], xy2[1])
 
 
+# Евклідова евристика
 def euclideanHeuristic(position, problem):
-    "The Euclidean distance heuristic for a PositionSearchProblem"
-    xy1 = position
-    xy2 = problem.goal
-    return euclidean(xy1[0], xy2[0], xy1[1], xy2[1])
-    # return ((xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2) ** 0.5
-
-
-def euclideanHeuristicSquared(position, problem):
-    "The Euclidean Squared distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
     return euclidean(xy1[0], xy2[0], xy1[1], xy2[1])
 
 
+# Евклідова квадратична евристика
+def euclideanSquaredHeuristic(position, problem):
+    xy1 = position
+    xy2 = problem.goal
+    return euclideanSquared(xy1[0], xy2[0], xy1[1], xy2[1])
+
+
+# Мангеттенська евристика для проблеми пошуку кутів (4 точок)
 def cornersManhattanHeuristic(state, problem):
-    """
-    A heuristic for the CornersProblem that you defined.
-
-      state:   The current search state
-               (a data structure you chose in your search problem)
-
-      problem: The CornersProblem instance for this layout.
-
-    This function should always return a number that is a lower bound on the
-    shortest path from the state to a goal of the problem; i.e.  it should be
-    admissible (as well as consistent).
-    """
     if len(state[1]) == 0:
         return 0
 
@@ -97,24 +88,12 @@ def cornersManhattanHeuristic(state, problem):
 
     for s in state[1]:
         val.append(manhattan(s[0], state[0][0], s[1], state[0][1]))
-        # val.append(abs(s[0] - state[0][0]) + abs(s[1] - state[0][1]))
 
     return max(val)
 
 
+# Евклідова евристика для проблеми пошуку кутів (4 точок)
 def cornersEuclideanHeuristic(state, problem):
-    """
-    A heuristic for the CornersProblem that you defined.
-
-      state:   The current search state
-               (a data structure you chose in your search problem)
-
-      problem: The CornersProblem instance for this layout.
-
-    This function should always return a number that is a lower bound on the
-    shortest path from the state to a goal of the problem; i.e.  it should be
-    admissible (as well as consistent).
-    """
     if len(state[1]) == 0:
         return 0
 
@@ -122,24 +101,12 @@ def cornersEuclideanHeuristic(state, problem):
 
     for s in state[1]:
         val.append(euclidean(s[0], state[0][0], s[1], state[0][1]))
-        # val.append(((s[0] - state[0][0]) ** 2 + (s[1] - state[0][1]) ** 2) ** 0.5)
 
     return max(val)
 
 
+# Евклідова квадратична евристика для проблеми пошуку кутів (4 точок)
 def cornersEuclideanSquaredHeuristic(state, problem):
-    """
-    A heuristic for the CornersProblem that you defined.
-
-      state:   The current search state
-               (a data structure you chose in your search problem)
-
-      problem: The CornersProblem instance for this layout.
-
-    This function should always return a number that is a lower bound on the
-    shortest path from the state to a goal of the problem; i.e.  it should be
-    admissible (as well as consistent).
-    """
     if len(state[1]) == 0:
         return 0
 
@@ -147,42 +114,13 @@ def cornersEuclideanSquaredHeuristic(state, problem):
 
     for s in state[1]:
         val.append(euclideanSquared(s[0], state[0][0], s[1], state[0][1]))
-        # val.append((s[0] - state[0][0]) ** 2 + (s[1] - state[0][1]) ** 2)
 
     return max(val)
 
 
-# PLEASE, WRITE ANOTHER HEURISTICS
-def foodHeuristic(state, problem):
-    """
-    Your heuristic for the FoodSearchProblem goes here.
-
-    This heuristic must be consistent to ensure correctness.  First, try to come
-    up with an admissible heuristic; almost all admissible heuristics will be
-    consistent as well.
-
-    If using A* ever finds a solution that is worse uniform cost search finds,
-    your heuristic is *not* consistent, and probably not admissible!  On the
-    other hand, inadmissible or inconsistent heuristics may find optimal
-    solutions, so be careful.
-
-    The state is a tuple ( pacmanPosition, foodGrid ) where foodGrid is a Grid
-    (see game.py) of either True or False. You can call foodGrid.asList() to get
-    a list of food coordinates instead.
-
-    If you want access to info like walls, capsules, etc., you can query the
-    problem.  For example, problem.walls gives you a Grid of where the walls
-    are.
-
-    If you want to *store* information to be reused in other calls to the
-    heuristic, there is a dictionary called problem.heuristicInfo that you can
-    use. For example, if you only want to count the walls once and store that
-    value, try: problem.heuristicInfo['wallCount'] = problem.walls.count()
-    Subsequent calls to this heuristic can access
-    problem.heuristicInfo['wallCount']
-    """
+# Мангеттенська евристика для проблеми пошуку всієї їжі на полі
+def foodHeuristicManhattan(state, problem):
     position, foodGrid = state
-
     food = foodGrid.asList()
 
     if len(food) == 0:
@@ -192,6 +130,34 @@ def foodHeuristic(state, problem):
     for s in food:
         val.append(manhattan(s[0], state[0][0], s[1], state[0][1]))
 
+    return max(val)
+
+
+# Евклідова евристика для проблеми пошуку всієї їжі на полі
+def foodHeuristicEuclidean(state, problem):
+    position, foodGrid = state
+    food = foodGrid.asList()
+
+    if len(food) == 0:
+        return 0
+
+    val = []
+    for s in food:
+        val.append(euclidean(s[0], state[0][0], s[1], state[0][1]))
+    return max(val)
+
+
+# Евклідова квадратична евристика для проблеми пошуку всієї їжі на полі
+def foodHeuristicEuclideanSquared(state, problem):
+    position, foodGrid = state
+    food = foodGrid.asList()
+
+    if len(food) == 0:
+        return 0
+
+    val = []
+    for s in food:
+        val.append(euclideanSquared(s[0], state[0][0], s[1], state[0][1]))
     return max(val)
 
 
@@ -235,37 +201,26 @@ class PositionSearchProblem(search.SearchProblem):
         return successors
 
 
+# Ця проблема пошуку знаходить шляхи через усі чотири кути поля (4 точки)
 class CornersProblem(search.SearchProblem):
-    """
-    This search problem finds paths through all four corners of a layout.
-    You must select a suitable state space and successor function
-    """
 
+    # Зберігає стіни, кути та початкову позицію Pac-man
     def __init__(self, startingGameState):
-        """
-        Stores the walls, pacman's starting position and corners.
-        """
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height - 2, self.walls.width - 2
         self.corners = ((1, 1), (1, top), (right, 1), (right, top))
-        self._expanded = 0  # DO NOT CHANGE; Number of search nodes expanded
-        # Please add any code here which you would like to use
-        # in initializing the problem
+        self._expanded = 0
 
+    # Повертає стартову позицію Pac-man.
     def getStartState(self):
-        """
-        Returns the start state (in your state space, not the full Pacman state
-        space)
-        """
-        return (self.startingPosition, self.corners)
+        return self.startingPosition, self.corners
 
+    # Повертає булеве значення, яке характеризує, чи буде досягнута перемога, при переході у деякий стан.
     def isGoalState(self, state):
-        """
-        Returns whether this search state is a goal state of the problem.
-        """
         return len(state[1]) == 0
 
+    # Повертає можливі наступні стани для Pac-man.
     def getSuccessors(self, state):
 
         successors = []
@@ -281,10 +236,8 @@ class CornersProblem(search.SearchProblem):
         self._expanded += 1  # DO NOT CHANGE
         return successors
 
+    # Повертає вартість певної послідовності дій.
     def getCostOfActions(self, actions):
-        """
-        Returns the cost of a particular sequence of actions.
-        """
         x, y = self.startingPosition
         for action in actions:
             dx, dy = Actions.directionToVector(action)
@@ -292,16 +245,10 @@ class CornersProblem(search.SearchProblem):
         return len(actions)
 
 
-class FoodSearchProblem:
-    """
-    A search problem associated with finding the a path that collects all of the
-    food (dots) in a Pacman game.
+# Проблема пошуку, пов'язана з пошуком шляху, який збирає всю їжу у грі Pacman.
+class FoodSearchProblem(search.SearchProblem):
 
-    A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
-      pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
-      foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food
-    """
-
+    # Зберігає стіни, кути та початкову позицію Pac-man
     def __init__(self, startingGameState):
         self.start = (startingGameState.getPacmanPosition(), startingGameState.getFood())
         self.walls = startingGameState.getWalls()
@@ -309,14 +256,16 @@ class FoodSearchProblem:
         self._expanded = 0  # DO NOT CHANGE
         self.heuristicInfo = {}  # A dictionary for the heuristic to store information
 
+    # Повертає стартову позицію Pac-man.
     def getStartState(self):
         return self.start
 
+    # Повертає булеве значення, яке характеризує, чи буде досягнута перемога, при переході у деякий стан.
     def isGoalState(self, state):
         return state[1].count() == 0
 
+    # Повертає можливі наступні стани для Pac-man.
     def getSuccessors(self, state):
-        "Returns successor states, the actions they require, and a cost of 1."
         successors = []
         self._expanded += 1  # DO NOT CHANGE
         for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
@@ -329,8 +278,8 @@ class FoodSearchProblem:
                 successors.append((((nextx, nexty), nextFood), direction, 1))
         return successors
 
+    # Повертає вартість певної послідовності дій.
     def getCostOfActions(self, actions):
-        """Returns the cost of a particular sequence of actions."""
         x, y = self.getStartState()[0]
         cost = 0
         for action in actions:

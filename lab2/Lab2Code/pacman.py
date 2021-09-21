@@ -90,16 +90,8 @@ class GameState:
     def getWalls(self):
         return self.data.layout.walls
 
+    # Повернути місцеположення їжі
     def getFood(self):
-        """
-        Returns a Grid of boolean food indicator variables.
-
-        Grids can be accessed via list notation, so to check
-        if there is food at (x,y), just call
-
-        currentFood = state.getFood()
-        if currentFood[x][y] == True: ...
-        """
         return self.data.food
 
     # Перевірка, чи мають задані координати їжу

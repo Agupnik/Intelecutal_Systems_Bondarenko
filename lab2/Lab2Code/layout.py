@@ -82,6 +82,7 @@ def getLayout(name, back=2):
     return layout
 
 
+# Генерація поля для для проблеми пошуку точки
 def randomMaze():
     layout_2d = initRandMaze(20, 20)
     layout_2d[18][1] = '.'
@@ -89,6 +90,7 @@ def randomMaze():
     return Layout(flattedMaze(layout_2d))
 
 
+# Генерація поля для проблеми пошуку 4 точок
 def randomCorners():
     layout_2d = initRandMaze(20, 20, 7)
     layout_2d[18][1] = '.'
@@ -99,6 +101,7 @@ def randomCorners():
     return Layout(flattedMaze(layout_2d))
 
 
+# Генерація поля для проблеми пошуку всієї їжі
 def randomSearch():
     height = 20
     width = 20
@@ -117,6 +120,7 @@ def randomSearch():
     return Layout(flattedMaze(layout_2d))
 
 
+# Конвертація двувимірної матриці у список
 def flattedMaze(layout_2d):
     layout = []
     for i in range(len(layout_2d)):
@@ -127,6 +131,7 @@ def flattedMaze(layout_2d):
     return layout
 
 
+# Алгоритм генерації випадкового лабіринту (за випадковим алгоритмом Прима)
 def initRandMaze(width, height, num_of_rand_holes=120):
     maze = []
     for i in range(0, height):
@@ -172,96 +177,79 @@ def initRandMaze(width, height, num_of_rand_holes=120):
         return s_cells
 
     while walls:
-        # Pick a random wall
         rand_wall = walls[int(random.random() * len(walls)) - 1]
 
-        # Check if it is a left wall
         if rand_wall[1] != 0:
             if maze[rand_wall[0]][rand_wall[1] - 1] == 'u' and maze[rand_wall[0]][rand_wall[1] + 1] == ' ':
-                # Find the number of surrounding cells
                 s_cells = surroundingCells(rand_wall)
 
                 if s_cells < 2:
-                    # Denote the new path
                     maze[rand_wall[0]][rand_wall[1]] = ' '
 
-                    # Mark the new walls
-                    # Upper cell
+
                     if rand_wall[0] != 0:
                         if maze[rand_wall[0] - 1][rand_wall[1]] != ' ':
                             maze[rand_wall[0] - 1][rand_wall[1]] = '%'
                         if [rand_wall[0] - 1, rand_wall[1]] not in walls:
                             walls.append([rand_wall[0] - 1, rand_wall[1]])
 
-                    # Bottom cell
                     if rand_wall[0] != height - 1:
                         if maze[rand_wall[0] + 1][rand_wall[1]] != ' ':
                             maze[rand_wall[0] + 1][rand_wall[1]] = '%'
                         if [rand_wall[0] + 1, rand_wall[1]] not in walls:
                             walls.append([rand_wall[0] + 1, rand_wall[1]])
 
-                    # Leftmost cell
                     if rand_wall[1] != 0:
                         if maze[rand_wall[0]][rand_wall[1] - 1] != ' ':
                             maze[rand_wall[0]][rand_wall[1] - 1] = '%'
                         if [rand_wall[0], rand_wall[1] - 1] not in walls:
                             walls.append([rand_wall[0], rand_wall[1] - 1])
 
-                # Delete wall
                 for wall in walls:
                     if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
                         walls.remove(wall)
 
                 continue
 
-        # Check if it is an upper wall
         if rand_wall[0] != 0:
             if maze[rand_wall[0] - 1][rand_wall[1]] == 'u' and maze[rand_wall[0] + 1][rand_wall[1]] == ' ':
 
                 s_cells = surroundingCells(rand_wall)
                 if s_cells < 2:
-                    # Denote the new path
+
                     maze[rand_wall[0]][rand_wall[1]] = ' '
 
-                    # Mark the new walls
-                    # Upper cell
                     if rand_wall[0] != 0:
                         if maze[rand_wall[0] - 1][rand_wall[1]] != ' ':
                             maze[rand_wall[0] - 1][rand_wall[1]] = '%'
                         if [rand_wall[0] - 1, rand_wall[1]] not in walls:
                             walls.append([rand_wall[0] - 1, rand_wall[1]])
 
-                    # Leftmost cell
                     if rand_wall[1] != 0:
                         if maze[rand_wall[0]][rand_wall[1] - 1] != ' ':
                             maze[rand_wall[0]][rand_wall[1] - 1] = '%'
                         if [rand_wall[0], rand_wall[1] - 1] not in walls:
                             walls.append([rand_wall[0], rand_wall[1] - 1])
 
-                    # Rightmost cell
                     if rand_wall[1] != width - 1:
                         if maze[rand_wall[0]][rand_wall[1] + 1] != ' ':
                             maze[rand_wall[0]][rand_wall[1] + 1] = '%'
                         if [rand_wall[0], rand_wall[1] + 1] not in walls:
                             walls.append([rand_wall[0], rand_wall[1] + 1])
 
-                # Delete wall
                 for wall in walls:
                     if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
                         walls.remove(wall)
 
                 continue
 
-        # Check the bottom wall
         if rand_wall[0] != height - 1:
             if maze[rand_wall[0] + 1][rand_wall[1]] == 'u' and maze[rand_wall[0] - 1][rand_wall[1]] == ' ':
 
                 s_cells = surroundingCells(rand_wall)
                 if s_cells < 2:
-                    # Denote the new path
                     maze[rand_wall[0]][rand_wall[1]] = ' '
 
-                    # Mark the new walls
                     if rand_wall[0] != height - 1:
                         if maze[rand_wall[0] + 1][rand_wall[1]] != ' ':
                             maze[rand_wall[0] + 1][rand_wall[1]] = '%'
@@ -285,16 +273,13 @@ def initRandMaze(width, height, num_of_rand_holes=120):
 
                 continue
 
-        # Check the right wall
         if rand_wall[1] != width - 1:
             if maze[rand_wall[0]][rand_wall[1] + 1] == 'u' and maze[rand_wall[0]][rand_wall[1] - 1] == ' ':
 
                 s_cells = surroundingCells(rand_wall)
                 if s_cells < 2:
-                    # Denote the new path
                     maze[rand_wall[0]][rand_wall[1]] = ' '
 
-                    # Mark the new walls
                     if rand_wall[1] != width - 1:
                         if maze[rand_wall[0]][rand_wall[1] + 1] != ' ':
                             maze[rand_wall[0]][rand_wall[1] + 1] = '%'
@@ -318,18 +303,15 @@ def initRandMaze(width, height, num_of_rand_holes=120):
 
                 continue
 
-        # Delete the wall from the list anyway
         for wall in walls:
             if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
                 walls.remove(wall)
 
-    # Mark the remaining unvisited cells as walls
     for i in range(0, height):
         for j in range(0, width):
             if maze[i][j] == 'u':
                 maze[i][j] = '%'
 
-    # Make random holes to make different ways
     while num_of_rand_holes != 0:
         y = int(random.random() * height)
         x = int(random.random() * width)

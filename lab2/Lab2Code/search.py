@@ -50,9 +50,9 @@ def depthFirstSearch(problem):
 
     if not result:
         restartGame()
-    if isinstance(problem, searchAgents.FoodSearchProblem):
-        endTime = datetime.now()
-        print('Алгоритм працював:', endTime - startTime)
+    endTime = datetime.now()
+    print('Алгоритм працював:', endTime - startTime)
+    if not isinstance(problem, searchAgents.FoodSearchProblem):
         print('Шлях:')
         for way in result:
             print(way + "; ", end='')
@@ -94,9 +94,9 @@ def breadthFirstSearch(problem):
 
     if not result:
         restartGame()
-    if isinstance(problem, searchAgents.FoodSearchProblem):
-        endTime = datetime.now()
-        print('Алгоритм працював:', endTime - startTime)
+    endTime = datetime.now()
+    print('Алгоритм працював:', endTime - startTime)
+    if not isinstance(problem, searchAgents.FoodSearchProblem):
         print('Шлях:')
         for way in result:
             print(way + "; ", end='')
@@ -141,9 +141,10 @@ def uniformCostSearch(problem):
 
     if not result:
         restartGame()
-    if isinstance(problem, searchAgents.FoodSearchProblem):
-        endTime = datetime.now()
-        print('Алгоритм працював:', endTime - startTime)
+    endTime = datetime.now()
+    print('Алгоритм працював:', endTime - startTime)
+    print(f'Загальна ціна шляху {cost_result}')
+    if not isinstance(problem, searchAgents.FoodSearchProblem):
         print('Шлях:')
         for way in result:
             print(way + "; ", end='')
@@ -152,12 +153,11 @@ def uniformCostSearch(problem):
         for coords in coords_result:
             print(f'({coords[0]}, {coords[1]}); ', end='')
         print()
-        print(f'Загальна ціна шляху {cost_result}')
     return result
 
 
+# Алгоритм пошуку а-зірочка
 def aStarSearch(problem, heuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
     startTime = datetime.now()
     result = []
     visited = []
@@ -186,14 +186,14 @@ def aStarSearch(problem, heuristic):
 
     if not result:
         restartGame()
-    if isinstance(problem, searchAgents.FoodSearchProblem):
-        endTime = datetime.now()
-        print('Алгоритм працював:', endTime - startTime)
+    endTime = datetime.now()
+    print('Алгоритм працював:', endTime - startTime)
+    print(f'Загальна ціна шляху {cost_result}')
+    if not isinstance(problem, searchAgents.FoodSearchProblem):
         print('Шлях:')
         for way in result:
             print(way + "; ", end='')
         print()
-        print(f'Загальна ціна шляху {cost_result}')
     return result
 
 
@@ -216,6 +216,7 @@ def visualiseWay(coords, r=.3, g=0.0, b=1.0):
                     return
 
 
+# Метод для перезапуску гри
 def restartGame():
     print("Шляху не існує, перезапуск")
     _destroy_window()
